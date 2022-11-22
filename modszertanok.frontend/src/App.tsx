@@ -12,7 +12,7 @@ function App() {
   
   useEffect(() => {
     const delayFunction = setTimeout(() => {
-      fetch(`http://localhost:8080/hello/${message}`)
+      fetch(`${process.env.REACT_APP_BACKEND_API_URL}hello/${message}`)
       .then(res => res.text())
       .then(res => setGreeting(res as any));
     }, 500)
@@ -24,10 +24,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>{greeting}</h1>
-        <form>
           <input type="text" id="name" onChange={handleChange} value={message}/>
-        </form>
-        
       </header>
     </div>
   );
