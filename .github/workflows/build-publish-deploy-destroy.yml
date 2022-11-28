@@ -47,7 +47,7 @@ jobs:
       - name: Deploy stack
         run: npm run cdk -- deploy BackendExampleStack --require-approval never --outputs-file backend-outputs.json
       - name: Upload outputs file
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: backend-outputs.json
           path: ./backend-outputs.json
