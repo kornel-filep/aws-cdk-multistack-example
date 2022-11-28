@@ -27,4 +27,4 @@ jobs:
           name: helloworld-jar
           path: ./target/helloworld-backend-*.jar
       - name: upload to s3 bucket
-        run: aws s3 cp ./target/helloworld-backend-${{env.BRANCH_NAME}} s3://example-jar-backend
+        run: aws s3 cp ./target/helloworld-backend-${{env.BRANCH_NAME}}.jar s3://example-jar-backend
