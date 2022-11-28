@@ -93,6 +93,11 @@ jobs:
           node-version: 16
       - name: Install dependencies
         run: npm install
+      - name: Copy artifact from backend outputs
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-build
+          path: example.frontend/src/build
       - name: Synth stack
         run: npm run cdk -- synth FrontendExampleStack
       - name: Deploy stack
