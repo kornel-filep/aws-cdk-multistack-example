@@ -5,6 +5,13 @@ export class FrontendExampleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    if (!this.bundlingRequired) {
+      // We must skip undesired stacks to be able to deploy specific stacks.
+      // Refer to: https://github.com/aws/aws-cdk/issues/6743
+      console.info('Skipping ' + this.stackName);
+      return;
+  }
+
     const websiteBucket = new cdk.aws_s3.Bucket(this, 'FrontendBucket', {
       websiteIndexDocument: 'index.html',
       publicReadAccess: true,

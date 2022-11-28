@@ -11,18 +11,6 @@ export class BackendExampleStack extends cdk.Stack {
 
     const vpc = new cdk.aws_ec2.Vpc(this, 'ExampleVPC');
 
-    const backendJarBucket = cdk.aws_s3.Bucket.fromBucketName(this, 'BackendJarBucket', 'example-jar-backend')
-
-    new cdk.aws_s3_deployment.BucketDeployment(this, 'UploadJarToS3', {
-      sources: [cdk.aws_s3_deployment.Source.asset('../example.backend/target/')],
-      destinationBucket: backendJarBucket,
-    })
-
-    new cdk.CfnOutput(this, 'backendBucketUrl', {
-      value: backendJarBucket.bucketWebsiteUrl,
-      description: 'The url of the s3 bucket',
-      exportName: 'backendJarS3Url'
-    })
 
     const autoScalingGroup = new cdk.aws_autoscaling.AutoScalingGroup(this, 'exampleASG', {
       vpc: vpc,
@@ -33,18 +21,18 @@ export class BackendExampleStack extends cdk.Stack {
     });
 
     autoScalingGroup.addUserData(fs.readFileSync('scripts/backend.sh'));
-    autoScalingGroup.addToRolePolicy(new PolicyStatement({
-      sid: "AllowEverythingForThisBucket",
-      effect: Effect.ALLOW,
-      actions: [
-        "s3:GetObject",
-        "s3:ListBucket",
-        "s3:GetBucketLocation"
-      ],
-      resources: [
-        "arn:aws:s3:::Examplebackend/*"
-      ]
-    }))
+    // autoScalingGroup.addToRolePolicy(new PolicyStatement({
+    //   sid: "AllowEverythingForThisBucket",
+    //   effect: Effect.ALLOW,
+    //   actions: [
+    //     "s3:GetObject",
+    //     "s3:ListBucket",
+    //     "s3:GetBucketLocation"
+    //   ],
+    //   resources: [
+    //     "arn:aws:s3:::Examplebackend/*"
+    //   ]
+    // }))
 
     const applicationLoadBalancer = new cdk.aws_elasticloadbalancingv2.ApplicationLoadBalancer(this, 'BackendALB', {
       vpc: vpc,
