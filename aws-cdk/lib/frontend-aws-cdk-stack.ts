@@ -11,7 +11,7 @@ export class FrontendExampleStack extends cdk.Stack {
     })
 
     new cdk.aws_s3_deployment.BucketDeployment(this, 'FrontendDeploy', {
-      sources: [cdk.aws_s3_deployment.Source.asset('../Example.frontend/build')],
+      sources: [cdk.aws_s3_deployment.Source.asset('../example.frontend/build')],
       destinationBucket: websiteBucket,
     })
 

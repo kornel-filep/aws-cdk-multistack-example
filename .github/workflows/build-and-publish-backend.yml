@@ -10,7 +10,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -24,10 +24,26 @@ jobs:
           distribution: 'adopt'
       - name: package with maven ${{env.BRANCH_NAME}}
         run: mvn package -Djar.name=helloworld-backend-${{env.BRANCH_NAME}}
-      - name: Publish build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: helloworld-jar
-          path: ./backend.example/target/helloworld-backend-*.jar
       - name: upload to s3 bucket
         run: aws s3 cp ./target/helloworld-backend-${{env.BRANCH_NAME}}.jar s3://example-jar-backend
+  deploy-backend:
+    needs: build-backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./aws-cdk
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node 16
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+      - run: npm install
+      - name: Change S3 bucket URL in user-data
+      - run: sed -i '' "s/NAME_OF_JAR_TO_DEPLOY/helloworld-backend-${{env.BRANCH_NAME}}/g" ./scripts/backend.sh
+      - name: Synth stack
+      - run: npm run cdk -- synth BackendExampleStack
+      - name: Deploy stack
+        run: npm run cdk -- deploy BackendExampleStack --require-approval never
+

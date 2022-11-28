@@ -11,10 +11,10 @@ export class BackendExampleStack extends cdk.Stack {
 
     const vpc = new cdk.aws_ec2.Vpc(this, 'ExampleVPC');
 
-    const backendJarBucket = cdk.aws_s3.Bucket.fromBucketName(this, 'BackendJarBucket', 'Examplebackend')
+    const backendJarBucket = cdk.aws_s3.Bucket.fromBucketName(this, 'BackendJarBucket', 'example-jar-backend')
 
     new cdk.aws_s3_deployment.BucketDeployment(this, 'UploadJarToS3', {
-      sources: [cdk.aws_s3_deployment.Source.asset('../Example.backend/target/')],
+      sources: [cdk.aws_s3_deployment.Source.asset('../example.backend/target/')],
       destinationBucket: backendJarBucket,
     })
 
@@ -24,7 +24,7 @@ export class BackendExampleStack extends cdk.Stack {
       exportName: 'backendJarS3Url'
     })
 
-    const autoScalingGroup = new cdk.aws_autoscaling.AutoScalingGroup(this, 'ModdszertanokASG', {
+    const autoScalingGroup = new cdk.aws_autoscaling.AutoScalingGroup(this, 'exampleASG', {
       vpc: vpc,
       instanceType: cdk.aws_ec2.InstanceType.of(cdk.aws_ec2.InstanceClass.T3, cdk.aws_ec2.InstanceSize.NANO),
       machineImage: cdk.aws_ec2.MachineImage.latestAmazonLinux({generation: AmazonLinuxGeneration.AMAZON_LINUX_2}),
