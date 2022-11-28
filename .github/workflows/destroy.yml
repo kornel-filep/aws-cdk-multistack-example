@@ -1,4 +1,4 @@
-name: build-publish-deploy
+name: destroy
 
 on: [workflow_dispatch]
 
@@ -23,4 +23,4 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Destroy stack
-        run: npm run cdk -- destroy --all
+        run: npm run cdk -- destroy --all --require-approval never
