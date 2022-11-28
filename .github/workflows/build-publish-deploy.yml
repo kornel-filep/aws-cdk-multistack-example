@@ -1,4 +1,4 @@
-name: build-publish-deploy-destroy
+name: build-publish-deploy
 
 on:
   push:
