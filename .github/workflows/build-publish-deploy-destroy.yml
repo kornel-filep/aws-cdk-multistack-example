@@ -1,6 +1,5 @@
 name: build-publish-deploy-destroy
 
-run-name: ${{github.actor}} is building and publishing backend
 on: [push]
 
 env:
@@ -56,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./example-frontend
+        working-directory: ./example.frontend
     steps:
       - uses: actions/checkout@v3
       - name: Set up Node 16
@@ -65,4 +64,21 @@ jobs:
            node-version: 16
       - name: Install dependencies
         run: npm install
+      - name: Copy artifact from backend outputs
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-outputs.json
+          path: example.frontend/src/
+      - name: Build Frontend
+        run: npm run build
+      - name: Synth stack
+        run: npm run cdk -- synth FrontendExampleStack
+      - name: Deploy stack
+        run: npm run cdk -- deploy FrontendExampleStack --require-approval never --outputs-file frontend-outputs.json
+      - name: Upload outputs file
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-outputs.json
+          path: aws-cdk/frontend-outputs.json
+      
 
