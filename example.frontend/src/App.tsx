@@ -13,7 +13,7 @@ function App() {
   
   useEffect(() => {
     const delayFunction = setTimeout(() => {
-      fetch(`${process.env.CI ? `http://${outputs.BackendExampleStack.LoadBalancerDNS}/hello/${message}` : 'http://localhost:8080/'}hello/${message}`)
+      fetch(`${process.env.CI ? `http://${outputs.BackendExampleStack.LoadBalancerDNS}:8080/hello/${message}` : 'http://localhost:8080/'}hello/${message}`)
       .then(res => res.text())
       .then(res => setGreeting(res as any));
     }, 500)
