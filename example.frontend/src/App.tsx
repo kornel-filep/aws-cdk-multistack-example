@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import outputs from './backend-outputs.json'
 
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
   
   useEffect(() => {
     const delayFunction = setTimeout(() => {
-      fetch(`${process.env.REACT_APP_BACKEND_API_URL ? process.env.REACT_APP_BACKEND_API_URL : 'http://localhost:8080/'}hello/${message}`)
+      fetch(`${process.env.CI ? `http://${outputs.BackendExampleStack.LoadBalancerDNS}/hello/${message}` : 'http://localhost:8080/'}hello/${message}`)
       .then(res => res.text())
       .then(res => setGreeting(res as any));
     }, 500)

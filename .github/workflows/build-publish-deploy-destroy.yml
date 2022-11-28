@@ -1,4 +1,4 @@
-name: build-and-publish-backend
+name: build-publish-deploy-destroy
 
 run-name: ${{github.actor}} is building and publishing backend
 on: [push]
@@ -45,5 +45,10 @@ jobs:
       - name: Synth stack
         run: npm run cdk -- synth BackendExampleStack
       - name: Deploy stack
-        run: npm run cdk -- deploy BackendExampleStack --require-approval never
+        run: npm run cdk -- deploy BackendExampleStack --require-approval never --outputs-file backend-outputs.json
+      - name: Upload outputs file
+      - uses: actions/upload-artifact@v3
+        with:
+          name: backend-outputs.json
+          path: ./backend-outputs.json
 
