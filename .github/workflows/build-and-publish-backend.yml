@@ -39,11 +39,11 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-      - run: npm install
+        run: npm install
       - name: Change S3 bucket URL in user-data
-      - run: sed -i '' "s/NAME_OF_JAR_TO_DEPLOY/helloworld-backend-${{env.BRANCH_NAME}}/g" ./scripts/backend.sh
+        run: sed -i '' "s/NAME_OF_JAR_TO_DEPLOY/helloworld-backend-${{env.BRANCH_NAME}}/g" ./scripts/backend.sh
       - name: Synth stack
-      - run: npm run cdk -- synth BackendExampleStack
+        run: npm run cdk -- synth BackendExampleStack
       - name: Deploy stack
         run: npm run cdk -- deploy BackendExampleStack --require-approval never
 
