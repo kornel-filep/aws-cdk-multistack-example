@@ -19,7 +19,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: package with maven $BRANCH_NAME
-        run: mvn package -Djar.name=helloworld-backend-$BRANCH_NAME
+      - name: package with maven ${{env.BRANCH_NAME}}
+        run: mvn package -Djar.name=helloworld-backend-${{env.BRANCH_NAME}}
+      - name: Publish build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: helloworld-jar
+          path: ./target/helloworld-backend-*.jar
       - name: upload to s3 bucket
-        run: aws s3 cp ./target/helloworld-backend-$BRANCH_NAME s3://example-jar-backend
+        run: aws s3 cp ./target/helloworld-backend-${{env.BRANCH_NAME}} s3://example-jar-backend
