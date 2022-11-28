@@ -3,6 +3,9 @@ name: build-and-publish-backend
 run-name: ${{github.actor}} is building and publishing backend
 on: [push]
 
+env:
+  BRANCH_NAME: ${GITHUB_REF##*/}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: package with maven
-        run: mvn package -Djar.name=helloworld-backend-${GITHUB_REF##*/}
+      - name: package with maven $BRANCH_NAME
+        run: mvn package -Djar.name=helloworld-backend-$BRANCH_NAME
       - name: upload to s3 bucket
-        run: aws s3 cp ./target/helloworld-backend-${GITHUB_REF##*/} s3://example-jar-backend
+        run: aws s3 cp ./target/helloworld-backend-$BRANCH_NAME s3://example-jar-backend
