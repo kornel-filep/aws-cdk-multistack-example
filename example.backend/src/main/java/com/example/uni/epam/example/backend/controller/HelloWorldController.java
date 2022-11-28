@@ -14,6 +14,6 @@ public class HelloWorldController {
 
     @GetMapping("/hello/{name}")
     String greetByName(@PathVariable String name) {
-        return "Hello " + name.toUpperCase() + "!";
+        return "Hello " + name.toUpperCase() + "!!";
     }
 }
