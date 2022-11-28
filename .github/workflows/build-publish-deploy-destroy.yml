@@ -52,7 +52,7 @@ jobs:
           name: backend-outputs.json
           path: aws-cdk/backend-outputs.json
   build-frontend:
-    needs: deploy-backend:
+    needs: deploy-backend
     runs-on: ubuntu-latest
     defaults:
       run:
